@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn React not for Me ,we are Using Django.
         </a>
       </header>
     </div>
