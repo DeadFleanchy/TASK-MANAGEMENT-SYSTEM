@@ -1,0 +1,1549 @@
+new Code££££££"£$£"$%£%$$%$
+import requests
+
+def get_website_title(url):
+    """
+    Attempts to retrieve the title of a website using a simple GET request.
+    Note: This method is limited and may not work for all websites,
+    especially those with complex JavaScript rendering.
+    """
+    try:
+        response = requests.get(url, timeout=5)  # Added timeout
+        response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+        text = response.text
+        start_tag = "<title>"
+        end_tag = "</title>"
+        start_index = text.find(start_tag)
+        end_index = text.find(end_tag)
+
+        if start_index != -1 and end_index != -1:
+            title = text[start_index + len(start_tag):end_index]
+            return title.strip() #remove extra whitespace.
+        else:
+            return "Title not found."
+
+    except requests.exceptions.RequestException as e:
+        return f"Error: {e}"
+
+# Example Usage
+url = "https://www.google.com"  # Replace with the URL you want to test.
+title = get_website_title(url)
+print(f"Title of {url}: {title}")
+
+url2 = "https://www.example.com" #another example
+title2 = get_website_title(url2)
+print(f"Title of {url2}: {title2}")
+
+url3 = "https://www.thiswebsitedoesnotexist.com" #example of error handling
+title3 = get_website_title(url3)
+print(f"Title of {url3}: {title3}")
+
+
+
+
+/////////////////////////////////////////////////////////////////
+import requests
+import re #Regular expressions
+
+def get_google_search_title(search_query):
+    """
+    Simulates a Google search and retrieves the title of the search results page.
+    This method is limited and may not perfectly replicate a real browser's behavior.
+    """
+    try:
+        url = f"https://www.google.com/search?q={search_query.replace(' ', '+')}" #format the search query for the URL
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'} #add a user agent to prevent some bot detection.
+        response = requests.get(url, headers=headers, timeout=10) #added headers, and timeout
+        response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
+        text = response.text
+        title_match = re.search(r'<title>(.*?)</title>', text, re.IGNORECASE) #Use regular expression to find title.
+        if title_match:
+            title = title_match.group(1).strip()
+            return title
+        else:
+            return "Title not found."
+
+    except requests.exceptions.RequestException as e:
+        return f"Error: {e}"
+
+# Example Usage
+search_query = "Software Testing with Selenium"
+title = get_google_search_title(search_query)
+print(f"Page Title for '{search_query}': {title}")
+
+search_query2 = "Python web compiler"
+title2 = get_google_search_title(search_query2)
+print(f"Page Title for '{search_query2}': {title2}")
+
+search_query3 = "This will cause an error."
+title3 = get_google_search_title(search_query3)
+print(f"Page Title for '{search_query3}': {title3}")
+
+
+
+
+
+//////////////////////
+Designing a web task management system involves considering various aspects, from user experience to backend architecture. Here's a breakdown of how I'd approach it:
+
+**1. Define Core Features:**
+
+* **Task Creation & Management:**
+    * Ability to create tasks with titles, descriptions, due dates, priorities, and assigned users.
+    * Task categorization (e.g., projects, lists, tags).
+    * Task status tracking (e.g., To Do, In Progress, Done, Blocked).
+    * Subtasks or checklists within tasks.
+    * File attachments.
+    * Comments and discussions within tasks.
+    * Recurring tasks.
+* **User & Team Management:**
+    * User registration and authentication.
+    * Team creation and management.
+    * Role-based access control (e.g., admin, member, guest).
+    * User assignment to tasks and projects.
+* **Project Management:**
+    * Project creation and overview.
+    * Project timelines and progress tracking.
+    * Gantt chart or Kanban board views.
+    * Project reporting and analytics.
+* **Notifications & Reminders:**
+    * Email or in-app notifications for task assignments, due dates, and updates.
+    * Reminders for upcoming deadlines.
+* **Search & Filtering:**
+    * Robust search functionality for tasks and projects.
+    * Filtering options based on various criteria (e.g., assignee, due date, status, tags).
+* **Integrations:**
+    * Integration with other tools (e.g., calendar apps, email, communication platforms).
+
+**2. User Interface (UI) and User Experience (UX):**
+
+* **Intuitive and User-Friendly Design:**
+    * Clean and uncluttered interface.
+    * Easy navigation and task management.
+    * Responsive design for different screen sizes.
+* **Visual Task Management:**
+    * Kanban board for visualizing task progress.
+    * Calendar view for managing deadlines.
+    * List view for detailed task information.
+* **Customization:**
+    * Personalized dashboards and views.
+    * Customizable task statuses and priorities.
+    * Theme options.
+
+**3. Backend Architecture:**
+
+* **Database:**
+    * Relational database (e.g., PostgreSQL, MySQL) or NoSQL database (e.g., MongoDB) depending on data structure and scalability requirements.
+* **Backend Framework:**
+    * Python (Django, Flask), Node.js (Express.js), or Ruby on Rails for building the backend API.
+* **API Design:**
+    * RESTful API for communication between the frontend and backend.
+    * JSON for data exchange.
+* **Authentication & Authorization:**
+    * JWT (JSON Web Tokens) or OAuth 2.0 for secure authentication and authorization.
+* **Real-Time Updates:**
+    * WebSockets for real-time updates (e.g., task status changes, comments).
+* **Scalability & Performance:**
+    * Load balancing and caching for handling high traffic.
+    * Asynchronous task processing for background operations.
+* **Cloud Hosting:**
+    * Cloud platforms (e.g., AWS, Google Cloud, Azure) for scalability and reliability.
+
+**4. Technology Stack (Example):**
+
+* **Frontend:**
+    * React, Vue.js, or Angular for building the user interface.
+    * HTML, CSS, JavaScript.
+* **Backend:**
+    * Python (Django or Flask).
+    * PostgreSQL or MongoDB.
+* **API:**
+    * RESTful API.
+* **Authentication:**
+    * JWT or OAuth 2.0.
+* **Real-time:**
+    * Websockets.
+* **Cloud:**
+    * AWS or Google Cloud.
+
+**5. Development Process:**
+
+* **Agile Methodology:**
+    * Iterative development with sprints and regular feedback.
+* **Version Control:**
+    * Git for code management.
+* **Testing:**
+    * Unit testing, integration testing, and end-to-end testing.
+* **Deployment:**
+    * Continuous integration and continuous deployment (CI/CD).
+
+**Example Database Schema (Simplified):**
+
+* **Users:**
+    * `id`, `username`, `email`, `password`, `role`.
+* **Projects:**
+    * `id`, `name`, `description`, `created_at`, `created_by`.
+* **Tasks:**
+    * `id`, `project_id`, `title`, `description`, `due_date`, `priority`, `status`, `assigned_to`, `created_by`.
+* **Comments:**
+    * `id`, `task_id`, `user_id`, `text`, `created_at`.
+
+**Key Considerations:**
+
+* **Security:** Implement robust security measures to protect user data.
+* **Accessibility:** Ensure the system is accessible to users with disabilities.
+* **Performance:** Optimize the system for speed and responsiveness.
+* **Scalability:** Design the system to handle future growth.
+* **Maintainability:** Write clean and well-documented code.
+* **User Feedback:** Continuously gather and incorporate user feedback.
+
+By carefully considering these aspects, you can design a robust and user-friendly web task management system.
+
+
+
+/////
+Python Code
+//////Back End///////////
+from flask import Flask, request, jsonify, make_response
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+import jwt  # PyJWT library
+from functools import wraps
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
+from typing import List, Optional
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+# App Configuration
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key'  # Change this!  Use a long, random string.
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://your_user:your_password@localhost/your_database'  # Update with your database details!
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Suppress a warning
+db = SQLAlchemy(app)
+Base = declarative_base()
+Session = sessionmaker(bind=db.engine)
+
+
+# --- Helper Functions ---
+
+def token_required(f):
+    """
+    Decorator to protect routes that require authentication.
+    """
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
+        try:
+            token = token.split(" ")[1]  # Remove "Bearer " prefix
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            #  The current user is now accessible as kwargs['current_user'] in the route.
+            user = User.query.filter_by(id=data['user_id']).first()
+            if user is None:
+                return jsonify({'message': 'Invalid Token! User not found'}), 401
+            return f(current_user=user, *args, **kwargs)  # Pass user object
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token has expired!'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'message': 'Invalid token!'}), 401
+        except Exception as e:
+            print(e)
+            return jsonify({'message': 'An error occurred while decoding the token!'}), 401
+
+    return decorated
+
+
+def validate_input(data, required_fields):
+    """
+    Helper function to validate required fields in a request.
+    """
+    missing_fields = [field for field in required_fields if field not in data]
+    if missing_fields:
+        return jsonify({'message': f'Missing fields: {", ".join(missing_fields)}'}), 400
+    return None  # Returns None if all fields are present
+
+
+# --- Models ---
+
+class User(Base):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(20), default='member')  # e.g., 'admin', 'member', 'guest'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    tasks: List['Task'] = relationship('Task', back_populates='assigned_user')
+    projects: List['Project'] = relationship('Project', back_populates='created_by_user')
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def __repr__(self):
+        return f'<User(username={self.username}, email={self.email}, role={self.role})>'
+
+
+class Project(Base):
+    __tablename__ = 'projects'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_by = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
+    created_by_user: User = relationship('User', back_populates='projects')  # Corrected backref name
+    tasks: List['Task'] = relationship('Task', back_populates='project')
+
+    def __repr__(self):
+        return f'<Project(name={self.name})>'
+
+
+class Task(Base):
+    __tablename__ = 'tasks'
+    id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.Integer, ForeignKey('projects.id'), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    due_date = db.Column(db.DateTime)
+    priority = db.Column(db.String(20), default='Medium')  # e.g., 'High', 'Medium', 'Low'
+    status = db.Column(db.String(20), default='To Do')  # e.g., 'To Do', 'In Progress', 'Done'
+    assigned_to = db.Column(db.Integer, ForeignKey('users.id'))
+    assigned_user: Optional['User'] = relationship('User', back_populates='tasks')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    project: Project = relationship('Project', back_populates='tasks')
+
+    def __repr__(self):
+        return f'<Task(title={self.title}, status={self.status}, priority={self.priority})>'
+
+
+
+# --- Routes ---
+
+@app.route('/register', methods=['POST'])
+def register():
+    """
+    Registers a new user.
+    """
+    data = request.get_json()
+    error = validate_input(data, ['username', 'email', 'password'])
+    if error:
+        return error
+
+    username = data['username']
+    email = data['email']
+    password = data['password']
+
+    # Check if user already exists
+    if User.query.filter_by(username=username).first():
+        return jsonify({'message': 'Username already exists!'}), 400
+    if User.query.filter_by(email=email).first():
+        return jsonify({'message': 'Email address already exists!'}), 400
+
+    new_user = User(username=username, email=email)
+    new_user.set_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'message': 'Registered successfully!'}), 201
+
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    """
+    Logs in a user and returns a JWT token.
+    """
+    data = request.get_json()
+    error = validate_input(data, ['username', 'password'])
+    if error:
+        return error
+
+    username = data['username']
+    password = data['password']
+
+    user = User.query.filter_by(username=username).first()
+    if not user or not user.check_password(password):
+        return jsonify({'message': 'Invalid credentials!'}), 401
+
+    # Generate JWT token
+    token = jwt.encode(
+        {'user_id': user.id, 'exp': datetime.utcnow() +  datetime.timedelta(hours=24)},  # Token expires in 24 hours
+        app.config['SECRET_KEY'],
+        algorithm='HS256'
+    )
+    return jsonify({'token': token}), 200
+
+
+
+@app.route('/users', methods=['GET'])
+@token_required
+def get_users(current_user):
+    """
+    Returns a list of all users.  Requires a valid token.
+    """
+    if current_user.role != 'admin':
+        return jsonify({'message': 'Unauthorized!'}), 403
+    users = User.query.all()
+    output = [{'id': user.id, 'username': user.username, 'email': user.email, 'role': user.role} for user in users]
+    return jsonify({'users': output}), 200
+
+
+
+@app.route('/projects', methods=['GET', 'POST'])
+@token_required
+def manage_projects(current_user):
+    """
+    Handles listing and creating projects.
+    """
+    if request.method == 'GET':
+        projects = Project.query.all()
+        output = [{'id': project.id, 'name': project.name, 'description': project.description, 'created_by': project.created_by_user.username} for project in projects]
+        return jsonify({'projects': output}), 200
+
+    elif request.method == 'POST':
+        data = request.get_json()
+        error = validate_input(data, ['name', 'description'])
+        if error:
+            return error
+
+        name = data['name']
+        description = data['description']
+        new_project = Project(name=name, description=description, created_by=current_user.id)
+        db.session.add(new_project)
+        db.session.commit()
+        return jsonify({'message': 'Project created successfully!'}), 201
+
+
+
+@app.route('/projects/<project_id>', methods=['GET', 'PUT', 'DELETE'])
+@token_required
+def manage_project(current_user, project_id):
+    """
+    Handles retrieving, updating, and deleting a specific project.
+    """
+    project = Project.query.get(project_id)
+    if not project:
+        return jsonify({'message': 'Project not found!'}), 404
+
+    if request.method == 'GET':
+        project_data = {
+            'id': project.id,
+            'name': project.name,
+            'description': project.description,
+            'created_by': project.created_by_user.username,
+        }
+        return jsonify({'project': project_data}), 200
+
+    elif request.method == 'PUT':
+        data = request.get_json()
+        error = validate_input(data, ['name', 'description']) # added validation
+        if error:
+            return error
+        project.name = data['name']
+        project.description = data['description']
+        db.session.commit()
+        return jsonify({'message': 'Project updated successfully!'}), 200
+
+    elif request.method == 'DELETE':
+        db.session.delete(project)
+        db.session.commit()
+        return jsonify({'message': 'Project deleted successfully!'}), 200
+
+
+
+@app.route('/tasks', methods=['GET', 'POST'])
+@token_required
+def manage_tasks(current_user):
+    """
+    Handles listing and creating tasks.
+    """
+    if request.method == 'GET':
+        tasks = Task.query.all()
+        output = [{
+            'id': task.id,
+            'project_id': task.project.name,
+            'title': task.title,
+            'description': task.description,
+            'due_date': task.due_date.isoformat() if task.due_date else None,
+            'priority': task.priority,
+            'status': task.status,
+            'assigned_to': task.assigned_user.username if task.assigned_user else None,
+        } for task in tasks]
+        return jsonify({'tasks': output}), 200
+
+    elif request.method == 'POST':
+        data = request.get_json()
+        error = validate_input(data, ['project_id', 'title', 'description', 'priority', 'status', ])
+        if error:
+            return error
+
+        project_id = data['project_id']
+        title = data['title']
+        description = data['description']
+        due_date = datetime.strptime(data['due_date'], '%Y-%m-%d') if data['due_date'] else None #parse
+        priority = data['priority']
+        status = data['status']
+        assigned_to = data.get('assigned_to')  # Optional field
+
+        project = Project.query.get(project_id)
+        if not project:
+            return jsonify({'message': 'Project not found!'}), 400
+
+        assigned_user = User.query.get(assigned_to) if assigned_to else None # Find user.
+
+        new_task = Task(
+            project_id=project_id,
+            title=title,
+            description=description,
+            due_date=due_date,
+            priority=priority,
+            status=status,
+            assigned_to=assigned_to, #save user ID
+        )
+        db.session.add(new_task)
+        db.session.commit()
+        return jsonify({'message': 'Task created successfully!'}), 201
+
+
+
+@app.route('/tasks/<task_id>', methods=['GET', 'PUT', 'DELETE'])
+@token_required
+def manage_task(current_user, task_id):
+    """
+    Handles retrieving, updating, and deleting a specific task.
+    """
+    task = Task.query.get(task_id)
+    if not task:
+        return jsonify({'message': 'Task not found!'}), 404
+
+    if request.method == 'GET':
+        task_data = {
+            'id': task.id,
+            'project_id': task.project.name,
+            'title': task.title,
+            'description': task.description,
+            'due_date': task.due_date.isoformat() if task.due_date else None,
+            'priority': task.priority,
+            'status': task.status,
+            'assigned_to': task.assigned_user.username if task.assigned_user else None,
+        }
+        return jsonify({'task': task_data}), 200
+
+    elif request.method == 'PUT':
+        data = request.get_json()
+        error = validate_input(data, ['project_id', 'title', 'description', 'due_date', 'priority', 'status'])
+        if error:
+            return error
+
+        project_id = data['project_id']
+        title = data['title']
+        description = data['description']
+        due_date = datetime.strptime(data['due_date'], '%Y-%m-%d') if data['due_date'] else None
+        priority = data['priority']
+        status = data['status']
+        assigned_to = data.get('assigned_to')
+
+        project_obj = Project.query.get(project_id)
+        if not project_obj:
+            return jsonify({'message': 'Project not found!'}), 400
+
+        assigned_user = User.query.get(assigned_to) if assigned_to else None
+
+        task.project_id = project_id
+        task.title = title
+        task.description = description
+        task.due_date = due_date
+        task.priority = priority
+        task.status = status
+        task.assigned_to = assigned_to
+        db.session.commit()
+        return jsonify({'message': 'Task updated successfully!'}), 200
+
+    elif request.method == 'DELETE':
+        db.session.delete(task)
+        db.session.commit()
+        return jsonify({'message': 'Task deleted successfully!'}), 200
+
+
+
+# --- Initialize Database ---
+with app.app_context():
+    db.create_all() #moved to inside app context
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+//////////////////Front End?////////////////
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Calendar } from "@/components/ui/calendar"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Plus, Edit, Trash2, Calendar as CalendarIcon, Loader2, AlertCircle } from 'lucide-react'; // Import icons
+import { Toaster, toast } from 'sonner';
+
+// --- Helper Functions ---
+
+const API_BASE_URL = 'http://localhost:5000'; // Adjust if your backend runs on a different port/domain
+
+// --- Custom Hook for Authentication ---
+const useAuth = () => {
+    const [user, setUser] = useState<{ id: number; username: string; role: string } | null>(null);
+    const [token, setToken] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true); // Add loading state
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
+        if (storedToken && storedUser) {
+            setToken(storedToken);
+            setUser(JSON.parse(storedUser));
+        }
+        setLoading(false); // Set loading to false after checking storage
+    }, []);
+
+    const login = (userData: { token: string; user: { id: number; username: string; role: string } }) => {
+        setToken(userData.token);
+        setUser(userData.user);
+        localStorage.setItem('token', userData.token);
+        localStorage.setItem('user', JSON.stringify(userData.user));
+        toast.success('Logged in successfully!');
+    };
+
+    const logout = () => {
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        toast.success('Logged out!');
+    };
+
+    return { user, token, login, logout, loading };
+};
+
+// --- Components ---
+
+const AuthForm = ({ onLogin }: { onLogin: (data: any) => void }) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [isRegister, setIsRegister] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        try {
+            const url = isRegister ? `${API_BASE_URL}/register` : `${API_BASE_URL}/login`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password, email: username }), // Use username as email for simplicity
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                if (isRegister) {
+                    toast.success('Registration successful! Please log in.');
+                    setIsRegister(false); // Switch to login after successful registration
+                } else {
+                    onLogin({ token: data.token, user: { id: data.user_id, username: username, role: data.role || 'member' } }); // Adjust based on your actual response
+                }
+            } else {
+                setError(data.message || 'Login failed');
+                toast.error(data.message || 'Login failed');
+            }
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+            toast.error(err.message || 'An error occurred');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button variant="outline">
+                    {isRegister ? 'Register' : 'Login'}
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>{isRegister ? 'Register' : 'Login'}</DialogTitle>
+                    <DialogDescription>
+                        {isRegister ? 'Create an account' : 'Log in to your account'}
+                    </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <label htmlFor="username" className="text-sm font-medium block">
+                            Username
+                        </label>
+                        <Input
+                            id="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                            placeholder="Enter your username"
+                            className="w-full"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label htmlFor="password" className="text-sm font-medium block">
+                            Password
+                        </label>
+                        <Input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            placeholder="Enter your password"
+                            className="w-full"
+                        />
+                    </div>
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                    <Button type="submit" className="w-full" disabled={loading}>
+                        {loading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Loading...
+                            </>
+                        ) : (
+                            isRegister ? 'Register' : 'Login'
+                        )}
+                    </Button>
+                    <button
+                        type="button"
+                        className="text-sm text-blue-500 hover:underline w-full text-center"
+                        onClick={() => setIsRegister(!isRegister)}
+                        disabled={loading}
+                    >
+                        {isRegister ? 'Already have an account? Login' : 'Create an account'}
+                    </button>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+const ProjectForm = ({
+    onClose,
+    onSubmit,
+    initialValues,
+    isEditing
+}: {
+    onClose: () => void;
+    onSubmit: (data: { name: string; description: string }) => void;
+    initialValues?: { name: string; description: string };
+    isEditing?: boolean;
+}) => {
+    const [name, setName] = useState(initialValues?.name || '');
+    const [description, setDescription] = useState(initialValues?.description || '');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        if (!name.trim()) {
+            setError('Project name is required');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            onSubmit({ name, description });
+            onClose();
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+                <label htmlFor="name" className="text-sm font-medium block">
+                    Project Name
+                </label>
+                <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    placeholder="Enter project name"
+                    className="w-full"
+                />
+            </div>
+            <div className="space-y-2">
+                <label htmlFor="description" className="text-sm font-medium block">
+                    Description
+                </label>
+                <Textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter project description"
+                    className="w-full"
+                />
+            </div>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <div className="flex justify-end gap-4">
+                <Button variant="outline" onClick={onClose} disabled={loading}>
+                    Cancel
+                </Button>
+                <Button type="submit" disabled={loading}>
+                    {loading ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Loading...
+                        </>
+                    ) : (
+                        isEditing ? 'Update' : 'Create'
+                    )}
+                </Button>
+            </div>
+        </form>
+    );
+};
+
+const TaskForm = ({
+    onClose,
+    onSubmit,
+    projects,
+    users,
+    initialValues,
+    isEditing
+}: {
+    onClose: () => void;
+    onSubmit: (data: any) => void;
+    projects: { id: number; name: string }[];
+    users: { id: number; username: string }[];
+    initialValues?: any;
+    isEditing?: boolean;
+}) => {
+    const [projectId, setProjectId] = useState<number | undefined>(initialValues?.project_id);
+    const [title, setTitle] = useState(initialValues?.title || '');
+    const [description, setDescription] = useState(initialValues?.description || '');
+    const [dueDate, setDueDate] = useState<Date | undefined>(initialValues?.due_date ? new Date(initialValues.due_date) : undefined);
+    const [priority, setPriority] = useState(initialValues?.priority || 'Medium');
+    const [status, setStatus] = useState(initialValues?.status || 'To Do');
+    const [assignedTo, setAssignedTo] = useState<number | undefined>(initialValues?.assigned_to);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+
+        if (!projectId || !title.trim()) {
+            setError('Project and Title are required');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const taskData = {
+                project_id: projectId,
+                title,
+                description,
+                due_date: dueDate ? format(dueDate, 'yyyy-MM-dd') : null,
+                priority,
+                status,
+                assigned_to: assignedTo || null,
+            };
+            onSubmit(taskData);
+            onClose();
+        } catch (err: any) {
+            setError(err.message || 'An error occurred');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+                <label htmlFor="project" className="text-sm font-medium block">
+                    Project
+                </label>
+                <Select onValueChange={(value) => setProjectId(Number(value))} value={projectId?.toString()}>
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a project" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {projects.map((project) => (
+                            <SelectItem key={project.id} value={project.id.toString()}>
+                                {project.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="space-y-2">
+                <label htmlFor="title" className="text-sm font-medium block">
+                    Title
+                </label>
+                <Input
+                    id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    placeholder="Enter task title"
+                    className="w-full"
+                />
+            </div>
+            <div className="space-y-2">
+                <label htmlFor="description" className="text-sm font-medium block">
+                    Description
+                </label>
+                <Textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter task description"
+                    className="w-full"
+                />
+            </div>
+            <div className="space-y-2">
+                <label htmlFor="dueDate" className="text-sm font-medium block">
+                    Due Date
+                </label>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant={"outline"}
+                            className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !dueDate && "text-muted-foreground"
+                            )}
+                        >
+                            {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                            mode="single"
+                            selected={dueDate}
+                            onSelect={setDueDate}
+                            disabled={(date) =>
+                                date < new Date()
+                            }
+                            initialFocus
+                        />
+                    </PopoverContent>
+                </Popover>
+            </div>
+            <div className="space-y-2">
+                <label htmlFor="priority" className="text-sm font-medium block">
+                    Priority
+                </label>
+                <Select onValueChange={setPriority} value={priority}>
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select priority" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="High">High</SelectItem>
+                        <SelectItem value="Medium">Medium</SelectItem>
+                        <SelectItem value="Low">Low</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="space-y-2">
+                <label htmlFor="status" className="text-sm font-medium block">
+                    Status
+                </label>
+                <Select onValueChange={setStatus} value={status}>
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="To Do">To Do</SelectItem>
+                        <SelectItem value="In Progress">In Progress</SelectItem>
+                        <SelectItem value="Done">Done</SelectItem>
+                        <SelectItem value="Blocked">Blocked</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="space-y-2">
+                <label htmlFor="assignedTo" className="text-sm font-medium block">
+                    Assigned To
+                </label>
+                <Select onValueChange={(value) => setAssignedTo(Number(value))} value={assignedTo?.toString()}>
+                    <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select user" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {users.map((user) => (
+                            <SelectItem key={user.id} value={user.id.toString()}>
+                                {user.username}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <div className="flex justify-end gap-4">
+                <Button variant="outline" onClick={onClose} disabled={loading}>
+                    Cancel
+                </Button>
+                <Button type="submit" disabled={loading}>
+                    {loading ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Loading...
+                        </>
+                    ) : (
+                        isEditing ? 'Update' : 'Create'
+                    )}
+                </Button>
+            </div>
+        </form>
+    );
+};
+
+const TaskManagementApp = () => {
+    const { user, token, logout, loading: authLoading } = useAuth();
+    const [projects, setProjects] = useState<{ id: number; name: string; description: string; created_by: string }[]>([]);
+    const [tasks, setTasks] = useState<{
+        id: number;
+        project_id: string;
+        title: string;
+        description: string;
+        due_date: string | null;
+        priority: string;
+        status: string;
+        assigned_to: string | null;
+    }[]>([]);
+    const [users, setUsers] = useState<{ id: number; username: string }[]>([]);
+    const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+    const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+    const [editingProject, setEditingProject] = useState<{ name: string; description: string; id?: number } | null>(null);
+    const [editingTask, setEditingTask] = useState<any | null>(null);
+    const [loading, setLoading] = useState(false); // General loading state
+    const [error, setError] = useState<string | null>(null);
+
+    // Fetch projects
+    const fetchProjects = useCallback(async () => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/projects`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to fetch projects: ${response.status}`);
+            }
+            const data = await response.json();
+            setProjects(data.projects);
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while fetching projects');
+            toast.error(err.message || 'Failed to fetch projects');
+        } finally {
+            setLoading(false);
+        }
+    }, [token]);
+
+    // Fetch tasks
+    const fetchTasks = useCallback(async () => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/tasks`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to fetch tasks: ${response.status}`);
+            }
+            const data = await response.json();
+            setTasks(data.tasks);
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while fetching tasks');
+            toast.error(err.message || 'Failed to fetch tasks');
+        } finally {
+            setLoading(false);
+        }
+    }, [token]);
+
+    // Fetch users
+    const fetchUsers = useCallback(async () => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/users`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to fetch users: ${response.status}`);
+            }
+            const data = await response.json();
+            setUsers(data.users);
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while fetching users');
+            toast.error(err.message || 'Failed to fetch users');
+        } finally {
+            setLoading(false);
+        }
+    }, [token]);
+
+    // Initial data load
+    useEffect(() => {
+        if (token) {
+            fetchProjects();
+            fetchTasks();
+            fetchUsers();
+        }
+    }, [token, fetchProjects, fetchTasks, fetchUsers]);
+
+    const handleCreateProject = async (projectData: { name: string; description: string }) => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/projects`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(projectData),
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to create project: ${response.status}`);
+            }
+            await fetchProjects(); // Refresh projects
+            toast.success('Project created successfully!');
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while creating project');
+            toast.error(err.message || 'Failed to create project');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateProject = async (projectId: number, projectData: { name: string; description: string }) => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(projectData),
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to update project: ${response.status}`);
+            }
+            await fetchProjects(); // Refresh
+            toast.success('Project updated successfully!');
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while updating project');
+            toast.error(err.message || 'Failed to update project');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteProject = async (projectId: number) => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/projects/${projectId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to delete project: ${response.status}`);
+            }
+            await fetchProjects(); // Refresh
+            toast.success('Project deleted successfully!');
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while deleting project');
+            toast.error(err.message || 'Failed to delete project');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCreateTask = async (taskData: any) => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/tasks`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(taskData),
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to create task: ${response.status}`);
+            }
+            await fetchTasks();
+            toast.success('Task created successfully!');
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while creating task');
+            toast.error(err.message || 'Failed to create task');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateTask = async (taskId: number, taskData: any) => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(taskData),
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to update task: ${response.status}`);
+            }
+            await fetchTasks();
+            toast.success('Task updated successfully!');
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while updating task');
+            toast.error(err.message || 'Failed to update task');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteTask = async (taskId: number) => {
+        if (!token) return;
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to delete task: ${response.status}`);
+            }
+            await fetchTasks();
+            toast.success('Task deleted successfully!');
+        } catch (err: any) {
+            setError(err.message || 'An error occurred while deleting task');
+            toast.error(err.message || 'Failed to delete task');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (authLoading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+                <span className="sr-only">Loading...</span>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+                <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-200 mb-8">
+                    Task Management System
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400 mb-6 text-center max-w-md">
+                    Please log in to access the task management features.
+                </p>
+                <AuthForm onLogin={({ token, user: loggedInUser }) => {
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('user', JSON.stringify(loggedInUser));
+                    // Update state directly
+                    setUser(loggedInUser);
+                    setToken(token);
+                    // Refresh data
+                    fetchProjects();
+                    fetchTasks();
+                    fetchUsers();
+                    toast.success('Logged in successfully!');
+                }} />
+                {error && (
+                    <div className="mt-4 text-red-500 text-sm flex items-center">
+                        <AlertCircle className="mr-1 h-4 w-4" />
+                        {error}
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    return (
+        <div className="p-6">
+            <Toaster richColors />
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+                    Task Management Dashboard
+                </h1>
+                <div className="flex items-center gap-4">
+                    <span className="text-gray-600 dark:text-gray-400">
+                        Logged in as: <span className="font-semibold">{user.username}</span> ({user.role})
+                    </span>
+                    <Button variant="outline" onClick={logout}>
+                        Logout
+                    </Button>
+                </div>
+            </div>
+
+            {error && (
+                <div className="mb-4 text-red-500 text-sm flex items-center">
+                    <AlertCircle className="mr-1 h-4 w-4" />
+                    {error}
+                </div>
+            )}
+
+            <div className="mb-8">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-300">Projects</h2>
+                    <Button onClick={() => {
+                        setIsProjectModalOpen(true);
+                        setEditingProject(null);
+                    }}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        New Project
+                    </Button>
+                </div>
+                {loading ? (
+                    <div className="flex items-center">
+                        <Loader2 className="h-6 w-6 animate-spin text-gray-500 mr-2" />
+                        Loading Projects...
+                    </div>
+                ) : (
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Name</TableHead>
+                                <TableHead>Description</TableHead>
+                                <TableHead>Created By</TableHead>
+                                <TableHead>Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {projects.map((project) => (
+                                <TableRow key={project.id}>
+                                    <TableCell>{project.name}</TableCell>
+                                    <TableCell>{project.description}</TableCell>
+                                    <TableCell>{project.created_by}</TableCell>
+                                    <TableCell className="flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => {
+                                                setEditingProject({
+                                                    id: project.id,
+                                                    name: project.name,
+                                                    description: project.description
+                                                });
+                                                setIsProjectModalOpen(true);
+                                            }}
+                                        >
+                                            <Edit className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                            variant="destructive"
+                                            size="icon"
+                                            onClick={() => handleDeleteProject(project.id)}
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                )}
+
+                <Dialog open={isProjectModalOpen} onOpenChange={setIsProjectModalOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>{editingProject ? 'Edit Project' : 'Create New Project'}</DialogTitle>
+                            <DialogDescription>
+                                {editingProject
+                                    ? 'Make changes to the project below. Click save when you\'re done.'
+                                    : 'Enter project details below.'}
+                            </DialogDescription>
+                        </DialogHeader>
+                        <ProjectForm
+                            onClose={() => setIsProjectModalOpen(false)}
+                            onSubmit={editingProject?.id
+                                ? (data) => handleUpdateProject(editingProject.id, data)
+                                : handleCreateProject
+                            }
+                            initialValues={editingProject || undefined}
+                            isEditing={!!editingProject}
+                        />
+                    </DialogContent>
+                </Dialog>
+            </div>
+
+            <div>
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-300">Tasks</h2>
+                    <Button onClick={() => {
+                        setIsTaskModalOpen(true);
+                        setEditingTask(null);
+                    }}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        New Task
+                    </Button>
+                </div>
+                {loading ? (
+                    <div className="flex items-center">
+                        <Loader2 className="h-6 w-6 animate-spin text-gray-500 mr-2" />
+                        Loading Tasks...
+                    </div>
+                ) : (
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Project</TableHead>
+                                <TableHead>Title</TableHead>
+                                <TableHead>Description</TableHead>
+                                <TableHead>Due Date</TableHead>
+                                <TableHead>Priority</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Assigned To</TableHead>
+                                <TableHead>Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {tasks.map((task) => (
+                                <TableRow key={task.id}>
+                                    <TableCell>{task.project_id}</TableCell>
+                                    <TableCell>{task.title}</TableCell>
+                                    <TableCell>{task.description}</TableCell>
+                                    <TableCell>{task.due_date || 'N/A'}</TableCell>
+                                    <TableCell>{task.priority}</TableCell>
+                                    <TableCell>{task.status}</TableCell>
+                                    <TableCell>{task.assigned_to || 'N/A'}</TableCell>
+                                    <TableCell className="flex gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => {
+                                                setEditingTask(task);
+                                                setIsTaskModalOpen(true);
+                                            }}
+                                        >
+                                            <Edit className="h-4 w-4" />
+                                        </Button>
+                                        <Button
+                                            variant="destructive"
+                                            size="icon"
+                                            onClick={() => handleDeleteTask(task.id)}
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                )}
+
+                <Dialog open={isTaskModalOpen} onOpenChange={setIsTaskModalOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>{editingTask ? 'Edit Task' : 'Create New Task'}</DialogTitle>
+                            <DialogDescription>
+                                {editingTask
+                                    ? 'Make changes to the task below. Click save when you\'re done.'
+                                    : 'Enter task details below.'}
+                            </DialogDescription>
+                        </DialogHeader>
+                        <TaskForm
+                            onClose={() => setIsTaskModalOpen(false)}
+                            onSubmit={editingTask?.id
+                                ? (data) => handleUpdateTask(editingTask.id, data)
+                                : handleCreateTask
+                            }
+                            projects={projects}
+                            users={users}
+                            initialValues={editingTask || undefined}
+                            isEditing={!!editingTask}
+                        />
+                    </DialogContent>
+                </Dialog>
+            </div>
+        </div>
+    );
+};
+
+export default TaskManagementApp;
